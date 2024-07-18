@@ -29,7 +29,7 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'User registered successfully',
             'data' => $user
-        ]);
+        ], 201);
     }
 
     //login
@@ -46,7 +46,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'failed',
                 'message' => 'Invalid credentials'
-            ]);
+            ], 401);
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -105,7 +105,7 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'Restaurant registered successfully',
             'data' => $user
-        ]);
+        ], 201);
     }
 
      //driver register
@@ -139,7 +139,7 @@ class AuthController extends Controller
              'status' => 'success',
              'message' => 'Driver registered successfully',
              'data' => $user
-         ]);
+         ], 201);
      }
 
     //update latlong user
@@ -147,10 +147,12 @@ class AuthController extends Controller
     {
         $request->validate([
             'latlong' => 'required|string',
+            'address' => 'required|string',
         ]);
 
         $user = $request->user();
         $user->latlong = $request->latlong;
+        $user->address = $request->address;
         $user->save();
 
         return response()->json([
@@ -170,5 +172,23 @@ class AuthController extends Controller
              'message' => 'Get all restaurant',
              'data' => $restaurant
          ]);
+     }
+
+     //update fcm id
+     public function updateFcmId(Request $request)
+     {
+        $request->validate([
+            'fcm_id' => 'required|string',
+        ]);
+
+        $user = $request->user();
+        $user->fcm_id = $request->fcm_id;
+        $user->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'FCM ID updated successfully',
+            'data' => $user
+        ], 200);
      }
 }

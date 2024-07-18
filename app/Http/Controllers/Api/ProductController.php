@@ -27,9 +27,9 @@ class ProductController extends Controller
      }
 
         //get product by user id
-    public function getProductByUserId(Request $request)
+    public function getProductByUserId($userId)
     {
-        $products = Product::with('user')->where('user_id', $request->user_id)->get();
+        $products = Product::with('user')->where('user_id', $userId)->get();
 
         return response()->json([
             'status' => 'success',
@@ -44,7 +44,7 @@ class ProductController extends Controller
          $request->validate([
              'name' => 'required|string',
              'description' => 'required|string',
-             'price' => 'required|integer',
+             'price' => 'required|numeric',
              'stock' => 'required|integer',
              'is_available' => 'required|boolean',
              'is_favorite' => 'required|boolean',
@@ -72,7 +72,7 @@ class ProductController extends Controller
              'status' => 'success',
              'message' => 'Product added successfully',
              'data' => $product
-         ]);
+         ], 201);
      }
 
       //update
@@ -81,7 +81,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string',
             'description' => 'required|string',
-            'price' => 'required|integer',
+            'price' => 'required|numeric',
             'stock' => 'required|integer',
             'is_available' => 'required|boolean',
             'is_favorite' => 'required|boolean',

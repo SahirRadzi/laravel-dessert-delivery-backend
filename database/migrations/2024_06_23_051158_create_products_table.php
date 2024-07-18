@@ -18,7 +18,7 @@ return new class extends Migration
             //description nullable
             $table->text('description')->nullable();
             //price
-            $table->integer('price');
+            $table->double('price', 10,2);
             //stock
             $table->integer('stock');
             //is_available

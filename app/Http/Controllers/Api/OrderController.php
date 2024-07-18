@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -18,7 +21,8 @@ class OrderController extends Controller
             'order_items.*.product_id' => 'required|integer|exists:products,id',
             'order_items.*.quantity' => 'required|integer|min:1',
             'restaurant_id' => 'required|integer|exists:users,id',
-            'shipping_cost' => 'required|integer',
+            'shipping_cost' => 'required|numeric',
+            'maintenance_cost' => 'required|numeric',
 
         ]);
 
@@ -28,7 +32,8 @@ class OrderController extends Controller
             $totalPrice += $product->price * $item['quantity'];
         }
 
-        $totalBill = $totalPrice + $request->shipping_cost;
+        $totalBill = $totalPrice + $request->shipping_cost + $request->maintenance_cost;
+
 
         $user = $request->user();
         $data = $request->all();
@@ -58,7 +63,7 @@ class OrderController extends Controller
             'status' => 'success',
             'message' => 'Order created successfully',
             'data' => $order
-        ]);
+        ], 201);
     }
 
      //update purchase status
@@ -195,6 +200,114 @@ class OrderController extends Controller
         ]);
     }
 
+    //get payment method
+    public function getPaymentMethods()
+    {
+        $paymentMethods = [
+            'fpx' =>[
+                'TOYYIBPAY' => 'Toyyibpay',
+                'CHIP' => 'Chip',
+            ]
 
+        ];
+
+        return response()->json([
+            'message' => 'Payment methods retrieved successfully',
+            'payment_methods' => $paymentMethods
+        ], 200);
+    }
+
+    public function purchaseOrder(Request $request, $orderId)
+    {
+        $request->validate([
+            'payment_method' => 'required|in:fpx,qr_online',
+        ]);
+
+        $order = Order::where('id', $orderId)->where('user_id', auth()->id())->first();
+
+        if (!$order){
+            return response()->json(['message' => 'Order not found'], 404);
+        }else{
+            // Payment::create([
+            //     'order_id' => $order->id,
+            //     'payment_method' => $request->payment_method,
+            //     'amount' =>$order->total_bill,
+            //     'status' => 'pending',
+
+            // ]);
+
+        }
+
+
+    }
+
+    public function createBill()
+
+    {
+        //percentageFee = 10%
+        $rmX100 = 16.79 * 100;
+        $grandTotal = 10.90;
+        $x100 = $grandTotal * 100;
+        $idToyyib = "sahir.radzi";
+
+        $data = array(
+            'userSecretKey'=> config('toyyibpayconfig.key'),
+            'categoryCode'=> config('toyyibpayconfig.category'),
+            'billName'=>'Dessde',
+            'billDescription'=>'Cuba CreateBill Dessde',
+            'billPriceSetting'=>1,
+            'billPayorInfo'=>1,
+            'billAmount'=> $rmX100,
+            // 'billReturnUrl'=> route(name:'toyyibpay-status'),
+            // 'billCallbackUrl'=> route(name:'toyyibpay-callback'),
+            'billExternalReferenceNo' => 'TEST 01',
+            'billTo'=>'Sahir Radzi',
+            'billEmail'=>'sahir.radzi@gmail.com',
+            'billPhone'=>'0123456789',
+            'billSplitPayment'=>1,
+            'billSplitPaymentArgs'=>'[{"id":"'.$idToyyib.'","amount":"'.$x100.'"}]',
+            'billPaymentChannel'=>'0',
+            'billContentEmail'=>'Thank you for the testing!',
+            'billChargeToCustomer'=>1,
+
+        );
+
+
+        $url = 'https://dev.toyyibpay.com/index.php/api/createBill';
+        $response = Http::asForm()->post($url, $data);
+        $billCode = $response[0]['BillCode'];
+
+        return redirect('http://dev.toyyibpay.com/'.$billCode);
+
+    }
+
+    // public function paymentStatus()
+    // {
+    //     $response = request()->all(['status_id', 'billcode', 'order_id']);
+    //     return $response;
+
+    // }
+
+    // public function callBack()
+    // {
+    //     $response = request()->all(['refno', 'status', 'reason', 'billcode', 'order_id', 'amount']);
+    //     Log::info($response);
+    // }
+
+    // public function getBank()
+    // {
+    //     $curl = curl_init();
+
+    //     curl_setopt($curl, CURLOPT_POST, 0);
+    //     curl_setopt($curl, CURLOPT_URL, 'https://toyyibpay.com/index.php/api/getBank');
+    //     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    //     $result = curl_exec($curl);
+    //     $info = curl_getinfo($curl);
+    //     curl_close($curl);
+
+    //     echo $result;
+    // }
 
 }
+

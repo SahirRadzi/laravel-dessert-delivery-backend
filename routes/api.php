@@ -26,13 +26,27 @@ Route::post('/logout', [App\Http\Controllers\Api\AuthController::class, 'logout'
 //update latlong
 Route::put('/user/update-latlong', [App\Http\Controllers\Api\AuthController::class, 'updateLatLong'])->middleware('auth:sanctum');
 
+//update fcm id
+Route::put('/user/update-fcm',[App\Http\Controllers\Api\AuthController::class, 'updateFcmId'])->middleware('auth:sanctum');
+
 //get all restaurant
 Route::get('/restaurant', [App\Http\Controllers\Api\AuthController::class, 'getRestaurant']);
 
 Route::apiResource('/products', App\Http\Controllers\Api\ProductController::class)->middleware('auth:sanctum');
 
+//get product by user id
+Route::get('/restaurant/{userId}/products', [App\Http\Controllers\Api\ProductController::class, 'getProductByUserId'])->middleware('auth:sanctum');
+
 //order
 Route::post('/order', [App\Http\Controllers\Api\OrderController::class, 'createOrder'])->middleware('auth:sanctum');
+
+// get payment methods
+Route::get('/payment-methods', [App\Http\Controllers\Api\OrderController::class, 'getPaymentMethods']);
+
+Route::get('/create-bill/toyyibpay', [App\Http\Controllers\Api\OrderController::class, 'createBill'])->name(name:'toyyibpay-create');
+// Route::get('/getBank', [App\Http\Controllers\Api\OrderController::class, 'getBank']);
+// Route::get('/status/toyyibpay', [App\Http\Controllers\Api\OrderController::class, 'paymentStatus'])->name(name:'toyyibpay-status');
+// Route::post('/call-back/toyyibpay', [App\Http\Controllers\Api\OrderController::class, 'callBack'])->name(name:'toyyibpay-callback');
 
 
 //get order by user id

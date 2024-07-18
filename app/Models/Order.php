@@ -15,6 +15,7 @@ class Order extends Model
         'driver_id',
         'total_price',
         'shipping_cost',
+        'maintenance_cost',
         'total_bill',
         'payment_method',
         'status',

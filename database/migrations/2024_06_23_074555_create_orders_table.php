@@ -20,11 +20,13 @@ return new class extends Migration
             //driver_id
             $table->foreignId('driver_id')->nullable()->constrained('users')->onDelete('set null');
             //total price
-            $table->integer('total_price');
+            $table->double('total_price', 10,2);
             //shipping_cost
-            $table->integer('shipping_cost');
+            $table->double('shipping_cost', 10,2);
+            //maintenance_cost
+            $table->double('maintenance_cost', 10,2);
             //total bill
-            $table->integer('total_bill');
+            $table->double('total_bill', 10,2);
             //payment method
             $table->string('payment_method')->nullable();
             //status
