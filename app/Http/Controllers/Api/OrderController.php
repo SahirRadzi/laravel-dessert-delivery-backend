@@ -22,7 +22,6 @@ class OrderController extends Controller
             'order_items.*.quantity' => 'required|integer|min:1',
             'restaurant_id' => 'required|integer|exists:users,id',
             'shipping_cost' => 'required|numeric',
-            'maintenance_cost' => 'required|numeric',
 
         ]);
 
@@ -31,8 +30,17 @@ class OrderController extends Controller
             $product = Product::find($item['product_id']);
             $totalPrice += $product->price * $item['quantity'];
         }
+        $maintenanceCost = 0;
+        $totalBill = $totalPrice + $request->shipping_cost;
+        if ($totalBill < 25) {
+            $maintenanceCost = $totalBill * (9 / 100);
+          } else if ($totalBill > 25 && $totalBill < 50) {
+            $maintenanceCost = $totalBill * (8 / 100);
+          } else if ($totalBill > 50) {
+            $maintenanceCost = $totalBill * (7 / 100);
+          }
 
-        $totalBill = $totalPrice + $request->shipping_cost + $request->maintenance_cost;
+        $grandTotal = $maintenanceCost + $totalBill;
 
 
         $user = $request->user();
@@ -44,7 +52,8 @@ class OrderController extends Controller
         $data['shipping_latlong'] = $shippingLatLong;
         $data['status'] = 'pending';
         $data['total_price'] = $totalPrice;
-        $data['total_bill'] = $totalBill;
+        $data['maintenance_cost'] = $maintenanceCost;
+        $data['total_bill'] = $grandTotal;
 
         $order = Order::create($data);
 

@@ -24,7 +24,7 @@ return new class extends Migration
             //shipping_cost
             $table->double('shipping_cost', 10,2);
             //maintenance_cost
-            $table->double('maintenance_cost', 10,2);
+            $table->double('maintenance_cost', 10,2)->nullable();
             //total bill
             $table->double('total_bill', 10,2);
             //payment method
