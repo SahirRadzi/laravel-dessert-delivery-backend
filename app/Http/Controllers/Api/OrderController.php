@@ -253,11 +253,12 @@ class OrderController extends Controller
     public function createBill()
 
     {
-        //percentageFee = 10%
-        $rmX100 = 16.79 * 100;
+        //amount X 100
+        //value amount in SEN
+        $priceX100 = 16.79 * 100;
         $grandTotal = 10.90;
-        $x100 = $grandTotal * 100;
-        $idToyyib = "sahir.radzi";
+        $gradTotalX100 = $grandTotal * 100;
+        $idToyyibForVendor = "sahir.radzi";
 
         $data = array(
             'userSecretKey'=> config('toyyibpayconfig.key'),
@@ -266,7 +267,7 @@ class OrderController extends Controller
             'billDescription'=>'Cuba CreateBill Dessde',
             'billPriceSetting'=>1,
             'billPayorInfo'=>1,
-            'billAmount'=> $rmX100,
+            'billAmount'=> $priceX100,
             // 'billReturnUrl'=> route(name:'toyyibpay-status'),
             // 'billCallbackUrl'=> route(name:'toyyibpay-callback'),
             'billExternalReferenceNo' => 'TEST 01',
@@ -274,10 +275,13 @@ class OrderController extends Controller
             'billEmail'=>'sahir.radzi@gmail.com',
             'billPhone'=>'0123456789',
             'billSplitPayment'=>1,
-            'billSplitPaymentArgs'=>'[{"id":"'.$idToyyib.'","amount":"'.$x100.'"}]',
+            'billSplitPaymentArgs'=>'[{"id":"'.$idToyyibForVendor.'","amount":"'.$gradTotalX100.'"}]',
             'billPaymentChannel'=>'0',
             'billContentEmail'=>'Thank you for the testing!',
-            'billChargeToCustomer'=>1,
+
+            // 'billChargeToCustomer'=>0,
+            // set 0 to Customer
+            // Leave blank to Owner
 
         );
 
