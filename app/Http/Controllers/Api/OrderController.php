@@ -258,6 +258,8 @@ class OrderController extends Controller
         $priceX100 = 16.79 * 100;
         $grandTotal = 10.90;
         $gradTotalX100 = $grandTotal * 100;
+
+        // SplitPayment - username
         $idToyyibForVendor = "sahir.radzi";
 
         $data = array(
@@ -268,8 +270,8 @@ class OrderController extends Controller
             'billPriceSetting'=>1,
             'billPayorInfo'=>1,
             'billAmount'=> $priceX100,
-            // 'billReturnUrl'=> route(name:'toyyibpay-status'),
-            // 'billCallbackUrl'=> route(name:'toyyibpay-callback'),
+            'billReturnUrl'=> route(name:'toyyibpay-status'),
+            'billCallbackUrl'=> route(name:'toyyibpay-callback'),
             'billExternalReferenceNo' => 'TEST 01',
             'billTo'=>'Sahir Radzi',
             'billEmail'=>'sahir.radzi@gmail.com',
@@ -294,12 +296,12 @@ class OrderController extends Controller
 
     }
 
-    // public function paymentStatus()
-    // {
-    //     $response = request()->all(['status_id', 'billcode', 'order_id']);
-    //     return $response;
+    public function paymentStatus()
+    {
+        $response = request()->all(['status_id', 'billcode', 'order_id']);
+        return $response;
 
-    // }
+    }
 
     // public function callBack()
     // {
@@ -307,6 +309,8 @@ class OrderController extends Controller
     //     Log::info($response);
     // }
 
+
+    // Example study method GET (getBank)
     // public function getBank()
     // {
     //     $curl = curl_init();
