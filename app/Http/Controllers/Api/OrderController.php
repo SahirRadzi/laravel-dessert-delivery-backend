@@ -231,7 +231,7 @@ class OrderController extends Controller
 
     // }
 
-    public function createBill(Request $request, $orderId)
+    public function createBill()
 
     {
         // $validate = $request->validate([

@@ -43,9 +43,9 @@ Route::post('/order', [App\Http\Controllers\Api\OrderController::class, 'createO
 // get payment methods
 Route::get('/payment-methods', [App\Http\Controllers\Api\OrderController::class, 'getPaymentMethods']);
 
-Route::get('/create-bill/toyyibpay', [App\Http\Controllers\Api\OrderController::class, 'createBill'])->name(name:'toyyibpay-create');
+Route::get('/toyyibpay/create-bill', [App\Http\Controllers\Api\OrderController::class, 'createBill'])->name(name:'toyyibpay-create');
 // Route::get('/getBank', [App\Http\Controllers\Api\OrderController::class, 'getBank']);
-Route::get('/status/toyyibpay', [App\Http\Controllers\Api\OrderController::class, 'paymentStatus'])->name(name:'toyyibpay-status');
+Route::get('/toyyibpay/payment-status', [App\Http\Controllers\Api\OrderController::class, 'paymentStatus'])->name(name:'toyyibpay-status');
 // Route::post('/call-back/toyyibpay', [App\Http\Controllers\Api\OrderController::class, 'callBack'])->name(name:'toyyibpay-callback');
 
 
