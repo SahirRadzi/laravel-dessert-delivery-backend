@@ -9,7 +9,6 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -209,13 +208,12 @@ class OrderController extends Controller
         ]);
     }
 
-    //get payment method
+    // get payment method
     public function getPaymentMethods()
     {
         $paymentMethods = [
             'fpx' =>[
-                'TOYYIBPAY' => 'Toyyibpay',
-                'CHIP' => 'Chip',
+                'TOYYIBPAY' => 'TOYYIBPAY',
             ]
 
         ];
@@ -226,33 +224,31 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function purchaseOrder(Request $request, $orderId)
-    {
-        $request->validate([
-            'payment_method' => 'required|in:fpx,qr_online',
-        ]);
-
-        $order = Order::where('id', $orderId)->where('user_id', auth()->id())->first();
-
-        if (!$order){
-            return response()->json(['message' => 'Order not found'], 404);
-        }else{
-            // Payment::create([
-            //     'order_id' => $order->id,
-            //     'payment_method' => $request->payment_method,
-            //     'amount' =>$order->total_bill,
-            //     'status' => 'pending',
-
-            // ]);
-
-        }
+    // public function purchaseOrder(Request $request, $orderId)
+    // {
 
 
-    }
 
-    public function createBill()
+    // }
+
+    public function createBill(Request $request, $orderId)
 
     {
+        // $validate = $request->validate([
+        //     'payment_method' => 'required|in:fpx',
+        // ]);
+
+        // $order = Order::where('id', $orderId)->where('user_id', auth()->id())->first();
+
+        // if (!$order){
+        //     return response()->json(['message' => 'Order not found'], 404);
+        // }
+        //     if($validate['payment_method'] === 'fpx'){
+
+        //         $paymentMethods = Order::find($orderId);
+        //         $paymentMethods->payment_method = $request->payment_method;
+        //         $paymentMethods->save();
+
         //amount X 100
         //value amount in SEN
         $priceX100 = 16.79 * 100;
@@ -271,7 +267,7 @@ class OrderController extends Controller
             'billPayorInfo'=>1,
             'billAmount'=> $priceX100,
             'billReturnUrl'=> route(name:'toyyibpay-status'),
-            'billCallbackUrl'=> route(name:'toyyibpay-callback'),
+            // 'billCallbackUrl'=> route(name:'toyyibpay-callback'),
             'billExternalReferenceNo' => 'TEST 01',
             'billTo'=>'Sahir Radzi',
             'billEmail'=>'sahir.radzi@gmail.com',
@@ -293,6 +289,8 @@ class OrderController extends Controller
         $billCode = $response[0]['BillCode'];
 
         return redirect('http://dev.toyyibpay.com/'.$billCode);
+
+        // }
 
     }
 
