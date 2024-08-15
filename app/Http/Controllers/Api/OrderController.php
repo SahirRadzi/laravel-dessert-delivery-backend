@@ -33,11 +33,11 @@ class OrderController extends Controller
         $totalBill = $totalPrice + $request->shipping_cost;
         if ($totalBill < 25) {
             $maintenanceCost = $totalBill * (9 / 100);
-          } else if ($totalBill > 25 && $totalBill < 50) {
+        } else if ($totalBill > 25 && $totalBill < 50) {
             $maintenanceCost = $totalBill * (8 / 100);
-          } else if ($totalBill > 50) {
+        } else if ($totalBill > 50) {
             $maintenanceCost = $totalBill * (7 / 100);
-          }
+        }
 
         $grandTotal = $maintenanceCost + $totalBill;
 
@@ -75,24 +75,24 @@ class OrderController extends Controller
     }
 
      //update purchase status
-     public function updatePurchaseStatus(Request $request, $id)
-     {
-         $request->validate([
-             'status' => 'required|string|in:pending,processing,completed,cancelled',
-         ]);
+    public function updatePurchaseStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|string|in:pending,processing,completed,cancelled',
+        ]);
 
-         $order = Order::find($id);
-         $order->status = $request->status;
-         $order->save();
+        $order = Order::find($id);
+        $order->status = $request->status;
+        $order->save();
 
-         return response()->json([
-             'status' => 'success',
-             'message' => 'Order status updated successfully',
-             'data' => $order
-         ]);
-     }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order status updated successfully',
+            'data' => $order
+        ]);
+    }
 
-      //order history
+    //order history
     public function orderHistory(Request $request)
     {
         $user = $request->user();
@@ -105,21 +105,21 @@ class OrderController extends Controller
         ]);
     }
 
-     //cancel order
-     public function cancelOrder(Request $request, $id)
-     {
-         $order = Order::find($id);
-         $order->status = 'cancelled';
-         $order->save();
+    //cancel order
+    public function cancelOrder(Request $request, $id)
+    {
+        $order = Order::find($id);
+        $order->status = 'cancelled';
+        $order->save();
 
-         return response()->json([
-             'status' => 'success',
-             'message' => 'Order cancelled successfully',
-             'data' => $order
-         ]);
-     }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order cancelled successfully',
+            'data' => $order
+        ]);
+    }
 
-      //get orders by status for restaurant
+    //get orders by status for restaurant
     public function getOrdersByStatus(Request $request)
     {
         $request->validate([
@@ -138,25 +138,25 @@ class OrderController extends Controller
         ]);
     }
 
-     //update order status for restaurant
-     public function updateOrderStatus(Request $request, $id)
-     {
-         $request->validate([
-             'status' => 'required|string|in:pending,processing,completed,cancelled,ready_for_delivery,prepared',
-         ]);
+    //update order status for restaurant
+    public function updateOrderStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|string|in:pending,processing,completed,cancelled,ready_for_delivery,prepared',
+        ]);
 
-         $order = Order::find($id);
-         $order->status = $request->status;
-         $order->save();
+        $order = Order::find($id);
+        $order->status = $request->status;
+        $order->save();
 
-         return response()->json([
-             'status' => 'success',
-             'message' => 'Order status updated successfully',
-             'data' => $order
-         ]);
-     }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order status updated successfully',
+            'data' => $order
+        ]);
+    }
 
-      //get orders by status for driver
+    //get orders by status for driver
     public function getOrdersByStatusDriver(Request $request)
     {
         $request->validate([
@@ -175,22 +175,22 @@ class OrderController extends Controller
         ]);
     }
 
-     //get order status ready for delivery
-     public function getOrderStatusReadyForDelivery(Request $request)
-     {
-         // $user = $request->user();
-         $orders = Order::with('restaurant')
-             ->where('status', 'ready_for_delivery')
-             ->get();
+    //get order status ready for delivery
+    public function getOrderStatusReadyForDelivery(Request $request)
+    {
+        // $user = $request->user();
+        $orders = Order::with('restaurant')
+            ->where('status', 'ready_for_delivery')
+            ->get();
 
-         return response()->json([
-             'status' => 'success',
-             'message' => 'Get all orders by status ready for delivery',
-             'data' => $orders
-         ]);
-     }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Get all orders by status ready for delivery',
+            'data' => $orders
+        ]);
+    }
 
-      //update order status for driver
+    //update order status for driver
     public function updateOrderStatusDriver(Request $request, $id)
     {
         $request->validate([
@@ -231,9 +231,9 @@ class OrderController extends Controller
 
     // }
 
-    public function createBill()
+    // public function createBill()
 
-    {
+    // {
         // $validate = $request->validate([
         //     'payment_method' => 'required|in:fpx',
         // ]);
@@ -251,60 +251,123 @@ class OrderController extends Controller
 
         //amount X 100
         //value amount in SEN
-        $priceX100 = 16.79 * 100;
-        $grandTotal = 10.90;
-        $gradTotalX100 = $grandTotal * 100;
+        // $priceX100 = 16.79 * 100;
+        // $grandTotal = 10.90;
+        // $gradTotalX100 = $grandTotal * 100;
+        // $orderId = 2;
 
-        // SplitPayment - username
-        $idToyyibForVendor = "sahir.radzi";
+        // // SplitPayment - username
+        // $idToyyibForVendor = "sahir.radzi";
 
-        $data = array(
-            'userSecretKey'=> config('toyyibpayconfig.key'),
-            'categoryCode'=> config('toyyibpayconfig.category'),
-            'billName'=>'Dessde',
-            'billDescription'=>'Cuba CreateBill Dessde',
-            'billPriceSetting'=>1,
-            'billPayorInfo'=>1,
-            'billAmount'=> $priceX100,
-            'billReturnUrl'=> route(name:'toyyibpay-status'),
-            // 'billCallbackUrl'=> route(name:'toyyibpay-callback'),
-            'billExternalReferenceNo' => 'TEST 01',
-            'billTo'=>'Sahir Radzi',
-            'billEmail'=>'sahir.radzi@gmail.com',
-            'billPhone'=>'0123456789',
-            'billSplitPayment'=>1,
-            'billSplitPaymentArgs'=>'[{"id":"'.$idToyyibForVendor.'","amount":"'.$gradTotalX100.'"}]',
-            'billPaymentChannel'=>'0',
-            'billContentEmail'=>'Thank you for the testing!',
+        // $data = array(
+        //     'userSecretKey'=> config('toyyibpayconfig.key'),
+        //     'categoryCode'=> config('toyyibpayconfig.category'),
+        //     'billName'=>'Dessde',
+        //     'billDescription'=>'Cuba CreateBill Dessde',
+        //     'billPriceSetting'=>1,
+        //     'billPayorInfo'=>1,
+        //     'billAmount'=> $priceX100,
+        //     'billReturnUrl'=> route(name:'toyyibpay-status'),
+        //     'billCallbackUrl'=> route(name:'toyyibpay-callback'),
+        //     'billExternalReferenceNo' => $orderId,
+        //     'billTo'=>'Sahir Radzi',
+        //     'billEmail'=>'sahir.radzi@gmail.com',
+        //     'billPhone'=>'0123456789',
+        //     'billSplitPayment'=>1,
+        //     'billSplitPaymentArgs'=>'[{"id":"'.$idToyyibForVendor.'","amount":"'.$gradTotalX100.'"}]',
+        //     'billPaymentChannel'=>'0',
+        //     'billContentEmail'=>'Thank you for the testing!',
 
             // 'billChargeToCustomer'=>0,
             // set 0 to Customer
             // Leave blank to Owner
 
-        );
+        // );
 
 
-        $url = 'https://dev.toyyibpay.com/index.php/api/createBill';
-        $response = Http::asForm()->post($url, $data);
-        $billCode = $response[0]['BillCode'];
+        // $url = 'https://dev.toyyibpay.com/index.php/api/createBill';
+        // $response = Http::asForm()->post($url, $data);
+        // $billCode = $response[0]['BillCode'];
 
-        return redirect('http://dev.toyyibpay.com/'.$billCode);
+        // return redirect('http://dev.toyyibpay.com/'.$billCode);
 
         // }
 
-    }
+    // }
 
-    public function paymentStatus()
-    {
-        $response = request()->all(['status_id', 'billcode', 'order_id']);
-        return $response;
-
-    }
-
-    // public function callBack()
+    // public function paymentStatus()
     // {
-    //     $response = request()->all(['refno', 'status', 'reason', 'billcode', 'order_id', 'amount']);
-    //     Log::info($response);
+    //     $validateStatus = request()->all(
+    //         [
+    //             'status_id' => 'required|integer',
+    //             'billcode' => 'required|string',
+    //             'order_id' => 'required|string'
+    //         ]);
+
+    //         $paymentStatus = Order::find($order_id->id);
+    //         $paymentStatus->status = $request->status_id;
+    //         $paymentStatus->billcode = $request->billcode;
+    //         $paymentStatus->id = $request->order_id;
+    //         $paymentStatus->save();
+
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'message' => 'Payment status updated successfully',
+    //             'data' => $paymentStatus
+
+    //         ]);
+
+        // $respon = request()->all([
+        //     'status_id',
+        //     'billcode',
+        //     'order_id'
+        // ]);
+
+        // return $respon;
+
+    // }
+
+    // public function callBack(Request $request)
+    // {
+    //     $request->validate([
+    //         'order_id' => 'required|string',
+    //         'refno' => 'required|string',
+    //         'status' => 'required|in:1,2,3',
+    //         'billcode' => 'required|string',
+    //         'transaction_time' => 'required',
+    //     ]);
+
+    //         $order_id = $request->input('order_id');
+    //         $refno = $request->input('refno');
+    //         $status = $request->input('status');
+    //         $billcode = $request->input('billcode');
+    //         $transaction_time = $request->input('transaction_time');
+
+    //     $order = Order::find('id', $order_id);
+    //         if ($order) {
+    //             if ($status == '1') {
+    //                 $order->status = 'Success';
+    //             } elseif ($status == '2') {
+    //                 $order->status = 'Pending';
+    //             } elseif ($status == '3') {
+    //                 $order->status = 'Failed';
+    //             }
+    //         $data = $request->all([
+    //             'order_id' => $request->order_id,
+    //             'refno' => $request->refno,
+    //             'status' => $request->status,
+    //             'billcode' => $request->billcode,
+    //             'transaction_time' => $request->transaction_time
+    //         ]);
+
+    //         $order->update($data);
+
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'message' => 'Order callback successfully',
+    //             'data' => $order
+    //         ]);
+    //     }
     // }
 
 
