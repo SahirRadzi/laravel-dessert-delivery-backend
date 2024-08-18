@@ -49,11 +49,13 @@ Route::get('/payment-methods', [App\Http\Controllers\Api\OrderController::class,
 // Route::get('/toyyibpay/payment-status', [App\Http\Controllers\Api\OrderController::class, 'paymentStatus'])->name(name:'toyyibpay-status');
 // Route::post('/toyyibpay/callback', [App\Http\Controllers\Api\OrderController::class, 'callBack'])->name(name:'toyyibpay-callback');
 
-Route::get('/toyyibpay/purchase', [App\Http\Controllers\ToyyibPayController::class, 'purchase'])->name('toyyibpay-purchase');
+Route::post('/toyyibpay/purchase', [App\Http\Controllers\ToyyibPayController::class, 'purchase'])->name('toyyibpay-purchase')->middleware('auth:sanctum');
 Route::get('/toyyibpay/payment/{bill_code}', [App\Http\Controllers\ToyyibPayController::class, 'billPaymentLink'])->name('toyyibpay-payment');
+// Route::get('/toyyibpay/purchase-show/{purchase}', [App\Http\Controllers\ToyyibPayController::class, 'show'])->name('purchase-show');
 Route::get('/toyyibpay/payment-status', [App\Http\Controllers\ToyyibPayController::class, 'returnUrl'])->name('toyyibpay-paymentStatus');
 Route::post('/toyyibpay/callBack', [App\Http\Controllers\ToyyibPayController::class, 'callBack'])->name('toyyibpay-callBack');
-Route::get('/toyyibpay/getbanks', [App\Http\Controllers\ToyyibPayController::class, 'getBankFPX']);
+Route::get('/toyyibpay/getbanks', [App\Http\Controllers\ToyyibPayController::class, 'getBanks']);
+Route::get('/toyyibpay/getbankFPX', [App\Http\Controllers\ToyyibPayController::class, 'getBankFPX']);
 
 
 //get order by user id

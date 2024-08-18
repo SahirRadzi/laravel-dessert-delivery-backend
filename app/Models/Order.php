@@ -18,10 +18,7 @@ class Order extends Model
         'maintenance_cost',
         'total_bill',
         'payment_method',
-        'refno',
         'status',
-        'billcode',
-        'transaction_time',
         'shipping_address',
         'shipping_latlong',
     ];

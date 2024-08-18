@@ -29,14 +29,8 @@ return new class extends Migration
             $table->double('total_bill', 10,2);
             //payment method
             $table->string('payment_method')->nullable();
-            //reference Number
-            $table->string('refno')->nullable();
             //status
             $table->string('status')->default('pending');
-            //bill Code
-            $table->string('billcode')->nullable();
-            //Transaction Time
-            $table->dateTime('transaction_time')->nullable();
             //shipping address
             $table->text('shipping_address')->nullable();
             //shipping latlong

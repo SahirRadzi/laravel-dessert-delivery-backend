@@ -9,6 +9,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\ToyyibPayController;
 
 class OrderController extends Controller
 {
@@ -67,10 +68,14 @@ class OrderController extends Controller
             $order->orderItems()->save($orderItem);
         }
 
+        // $toyyibPayController = new ToyyibPayController();
+        // $bill = $toyyibPayController->purchase($order);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Order created successfully',
-            'data' => $order
+            'data' => $order,
+            // 'bill' => $bill,
         ], 201);
     }
 
@@ -212,7 +217,7 @@ class OrderController extends Controller
     public function getPaymentMethods()
     {
         $paymentMethods = [
-            'fpx' =>[
+            'fpx-tp' =>[
                 'TOYYIBPAY' => 'TOYYIBPAY',
             ]
 
